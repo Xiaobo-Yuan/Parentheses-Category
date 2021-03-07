@@ -72,7 +72,91 @@ s[i] is one of  '(' , ')' and lowercase English letters.
         return res.toString();
     }
     
+ 
+301. Remove Invalid Parentheses
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Example 1:
+
+Input: "()())()"
+Output: ["()()()", "(())()"]
+Example 2:
+
+Input: "(a)())()"
+Output: ["(a)()()", "(a())()"]
+Example 3:
+
+Input: ")("
+Output: [""]
+
+
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> res = new ArrayList<>();
+        
+        int l = 0, r = 0;
+        
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                l++;
+            } else if (ch == ')') {
+                if (l == 0) {
+                    r++;
+                } else {
+                    l--;
+                }
+            }
+        }
+        
+        helper(s, 0, l, r, res);
+        return res;
+    }
     
+    private boolean isValid(String s) {
+        int balance = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                balance++;
+            } else if (ch == ')') {
+                if (balance == 0) return false;
+                balance--;
+            }
+        }
+        
+        return balance == 0;
+    }
+    
+    private void helper(String s, int start, int l, int r, List<String> res) {
+        if (l == 0 && r == 0) {
+            if (isValid(s)) {
+                res.add(s);
+            }
+            return;
+        }
+        
+        for (int i = start; i < s.length(); i++) {
+            if (i != start && s.charAt(i) == s.charAt(i - 1)) continue;
+            
+            if (s.charAt(i) == ')') {
+                if (r > 0) {
+                    helper(s.substring(0, i) + s.substring(i + 1), i, l, r - 1, res);
+                }
+            } else if (s.charAt(i) == '(') {
+                // Considering the example ")(((((()" to understand why complete the removal of 
+                // all the right parentheses before handling the removeal of all the left parentheses
+                // can avoid more invalid results
+                if (r == 0 && l > 0) {
+                    helper(s.substring(0, i) + s.substring(i + 1), i, l - 1, r, res);
+                }
+            }
+        }
+    }
+}
+
+
+
 
 
 921. Minimum Add to Make Parentheses Valid
