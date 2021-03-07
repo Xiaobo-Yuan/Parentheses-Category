@@ -1,0 +1,273 @@
+1249. Minimum Remove to Make Valid Parentheses
+
+Given a string s of '(' , ')' and lowercase English characters. 
+
+Your task is to remove the minimum number of parentheses ( '(' or ')', in any positions ) 
+so that the resulting parentheses string is valid and return any valid string.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, contains only lowercase characters, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+ 
+
+Example 1:
+
+Input: s = "lee(t(c)o)de)"
+Output: "lee(t(c)o)de"
+Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
+Example 2:
+
+Input: s = "a)b(c)d"
+Output: "ab(c)d"
+Example 3:
+
+Input: s = "))(("
+Output: ""
+Explanation: An empty string is also valid.
+Example 4:
+
+Input: s = "(a(b(c)d)"
+Output: "a(b(c)d)"
+ 
+
+Constraints:
+
+1 <= s.length <= 10^5
+s[i] is one of  '(' , ')' and lowercase English letters.
+
+
+    public String minRemoveToMakeValid(String s) {
+        StringBuilder sb = new StringBuilder();
+        
+        int openSeen = 0;
+        int balance = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                openSeen++;
+                balance++;
+            } else if (ch == ')') {
+                if (balance == 0) {
+                    continue;
+                }
+                balance--;
+            }
+            
+            sb.append(ch);
+        }
+        
+        int openToKeep = openSeen - balance;
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) == '(') {
+                openToKeep--;
+                if (openToKeep < 0) {
+                    continue;
+                }
+            }
+            res.append(sb.charAt(i));
+        }
+        
+        return res.toString();
+    }
+    
+    
+
+
+921. Minimum Add to Make Parentheses Valid
+
+Given a string S of '(' and ')' parentheses, we add the minimum number of parentheses ( '(' or ')', and in any positions ) 
+so that the resulting parentheses string is valid.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+Given a parentheses string, return the minimum number of parentheses we must add to make the resulting string valid.
+
+ 
+
+Example 1:
+
+Input: "())"
+Output: 1
+Example 2:
+
+Input: "((("
+Output: 3
+Example 3:
+
+Input: "()"
+Output: 0
+Example 4:
+
+Input: "()))(("
+Output: 4
+ 
+
+Note:
+
+S.length <= 1000
+S only consists of '(' and ')' characters.
+
+
+
+class Solution {
+    public int minAddToMakeValid(String S) {
+        int res = 0;
+        int balance = 0;
+        
+        for (char ch : S.toCharArray()) {
+            if (ch == '(') {
+                balance++;
+            } else if (ch == ')') {
+                if (balance == 0) {
+                    res++;
+                } else
+                    balance--;
+            }
+        }
+        
+        res += balance;
+        return res;
+    }
+}
+
+
+
+
+
+
+
+1614. Maximum Nesting Depth of the Parentheses
+
+A string is a valid parentheses string (denoted VPS) if it meets one of the following:
+
+It is an empty string "", or a single character not equal to "(" or ")",
+It can be written as AB (A concatenated with B), where A and B are VPS's, or
+It can be written as (A), where A is a VPS.
+We can similarly define the nesting depth depth(S) of any VPS S as follows:
+
+depth("") = 0
+depth(C) = 0, where C is a string with a single character not equal to "(" or ")".
+depth(A + B) = max(depth(A), depth(B)), where A and B are VPS's.
+depth("(" + A + ")") = 1 + depth(A), where A is a VPS.
+For example, "", "()()", and "()(()())" are VPS's (with nesting depths 0, 1, and 2), and ")(" and "(()" are not VPS's.
+
+Given a VPS represented as string s, return the nesting depth of s.
+
+ 
+
+Example 1:
+
+Input: s = "(1+(2*3)+((8)/4))+1"
+Output: 3
+Explanation: Digit 8 is inside of 3 nested parentheses in the string.
+Example 2:
+
+Input: s = "(1)+((2))+(((3)))"
+Output: 3
+Example 3:
+
+Input: s = "1+(2*3)/(2-1)"
+Output: 1
+Example 4:
+
+Input: s = "1"
+Output: 0
+ 
+
+Constraints:
+
+1 <= s.length <= 100
+s consists of digits 0-9 and characters '+', '-', '*', '/', '(', and ')'.
+It is guaranteed that parentheses expression s is a VPS.
+
+
+
+
+class Solution {
+    public int maxDepth(String s) {        
+        int max = 0;
+        int balance = 0;
+        
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                balance++;
+                max = Math.max(max, balance);
+            } else if (ch == ')') {
+                balance--;
+            }
+        }
+        
+        return max;
+    }
+}
+
+
+
+
+
+856. Score of Parentheses
+
+
+Given a balanced parentheses string S, compute the score of the string based on the following rule:
+
+() has score 1
+AB has score A + B, where A and B are balanced parentheses strings.
+(A) has score 2 * A, where A is a balanced parentheses string.
+ 
+
+Example 1:
+
+Input: "()"
+Output: 1
+Example 2:
+
+Input: "(())"
+Output: 2
+Example 3:
+
+Input: "()()"
+Output: 2
+Example 4:
+
+Input: "(()(()))"
+Output: 6
+ 
+
+Note:
+
+S is a balanced parentheses string, containing only ( and ).
+2 <= S.length <= 50
+
+
+
+class Solution {
+    // (()(()))  = (()) + ((()))
+    
+    public int scoreOfParentheses(String S) {
+        int res = 0;
+        int balance = 0;
+        
+        for (int i = 0; i < S.length(); i++) {
+            char ch = S.charAt(i);
+            
+            if (ch == '(') {
+                balance++;
+            } else if (ch == ')') {
+                balance--;
+                if (S.charAt(i - 1) == '(') {
+                    res += 1 << balance;
+                }
+            }
+        }
+        
+        return res;
+    }
+}
+
+
+
