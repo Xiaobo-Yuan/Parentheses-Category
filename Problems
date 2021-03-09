@@ -220,8 +220,88 @@ class Solution {
 }
 
 
+678. Valid Parenthesis String
+
+Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+
+The following rules define a valid string:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string "".
+ 
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "(*)"
+Output: true
+Example 3:
+
+Input: s = "(*))"
+Output: true
+ 
+
+Constraints:
+
+1 <= s.length <= 100
+s[i] is '(', ')' or '*'.
 
 
+
+   // Explained well in https://leetcode.com/problems/valid-parenthesis-string/discuss/107577/Short-Java-O(n)-time-O(1)-space-one-pass
+    
+    /*
+    If there is no "*", then we can use a counter to count the blanace btw "(" and ")", let's say "(())"
+    
+    0        1        2          1            0              balance = 0 + 1 + 1 - 1 - 1 = 0
+        +1   (   +1  ((    -1    (()   -1    (())
+   
+   
+   If a '*' is include, when we meet star, there are three branches +1, +0, -1. Let's say "(*))"
+   
+   balance = 0
+   1) "("   balance = 0 + 1 = 1
+   2) "(*"  so, balance = 1 + 1  = 2
+                        |= 1 + 0 = 1
+                        |= 1 - 1 = 0
+                        
+       so, we introduce the max and min, we call them balanceMax = 2 and balanceMin = 0
+       
+       if balanceMin is becoming negtive, it's invalid, the min must be zero.
+   
+   */
+    public boolean checkValidString(String s) {
+        int balanceMax = 0;
+        int balanceMin = 0;
+        
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                balanceMin++;
+                balanceMax++;
+            } else if (ch == ')') {
+                balanceMin--;
+                balanceMax--;
+            } else { // if "*" min - 1 in case when "*" represents ")", and max + 1 in case when "*" represents "("
+                balanceMin--;
+                balanceMax++;
+            }
+            
+            if (balanceMax < 0) return false; // "))", the first balanceMax < 0, invalid stop immediately
+            
+            balanceMin = Math.max(0, balanceMin);
+        }
+        
+        return balanceMin == 0;
+    }
+}
+    
+    
+    
 
 
 
