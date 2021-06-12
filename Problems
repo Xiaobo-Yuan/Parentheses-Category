@@ -38,7 +38,7 @@ Constraints:
 s[i] is one of  '(' , ')' and lowercase English letters.
 
 
-    public String minRemoveToMakeValid(String s) {
+        public String minRemoveToMakeValid(String s) {
         StringBuilder sb = new StringBuilder();
         
         int openSeen = 0;
@@ -57,14 +57,14 @@ s[i] is one of  '(' , ')' and lowercase English letters.
             sb.append(ch);
         }
         
+        if (balance == 0) return sb.toString();
+        
         int openToKeep = openSeen - balance;
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < sb.length(); i++) {
             if (sb.charAt(i) == '(') {
+                if (openToKeep <= 0) continue;
                 openToKeep--;
-                if (openToKeep < 0) {
-                    continue;
-                }
             }
             res.append(sb.charAt(i));
         }
