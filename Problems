@@ -300,7 +300,53 @@ s[i] is '(', ')' or '*'.
 }
     
     
+    // O(N * (3 ^ N))
+    // Time Limit Exceeded
+   
+    public boolean checkValidString(String s) {
+        return helper(new StringBuilder(s), 0);
+    }
     
+    private boolean helper(StringBuilder sb, int i) {
+        boolean res = false;
+              
+        if (i == sb.length()) {
+            return isValid(sb);
+        }
+        
+        if (sb.charAt(i) == '*') {
+            for (char ch : "() ".toCharArray()) {
+                sb.setCharAt(i, ch);
+                if (helper(sb, i + 1)) {
+                    return true;
+                }
+            }
+            
+            sb.setCharAt(i, '*');
+        } else {
+            res = helper(sb, i + 1);
+        }
+        
+        return res;
+    }
+    
+    private boolean isValid(StringBuilder sb) {
+        int balance = 0;
+        
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) == '(') {
+                balance++;
+            } else if (sb.charAt(i) == ')') {
+                if (balance == 0) {
+                   return false;
+                } else {
+                    balance--;
+                }
+            }
+        }
+        
+        return balance == 0;
+    }
 
 
 
