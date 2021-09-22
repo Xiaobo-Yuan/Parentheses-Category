@@ -46,7 +46,7 @@ s[i] is one of  '(' , ')' and lowercase English letters.
         for (char ch : s.toCharArray()) {
             if (ch == '(') {
                 openSeen++;
-                balance++;
+                balance++;           // also think of this as 'right++', which means how many closing parentheses are needed to to balance
             } else if (ch == ')') {
                 if (balance == 0) {
                     continue;
