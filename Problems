@@ -141,7 +141,8 @@ class Solution {
             
             if (s.charAt(i) == ')') {
                 if (r > 0) {
-                    helper(s.substring(0, i) + s.substring(i + 1), i, l, r - 1, res);
+                    helper(s.substring(0, i) + s.substring(i + 1), i, l, r - 1, res); // No need to worry about missing handling '(' since all '(' are 
+                                                                                      // already balanced before the current unbalanced ')'
                 }
             } else if (s.charAt(i) == '(') {
                 // Considering the example ")(((((()" to understand why complete the removal of 
