@@ -38,15 +38,15 @@ Constraints:
 s[i] is one of  '(' , ')' and lowercase English letters.
 
 
-        public String minRemoveToMakeValid(String s) {
+    public String minRemoveToMakeValid(String s) {
         StringBuilder sb = new StringBuilder();
         
-        int openSeen = 0;
+        int leftSeen = 0;
         int balance = 0;
         for (char ch : s.toCharArray()) {
             if (ch == '(') {
-                openSeen++;
-                balance++;           // also think of this as 'right++', which means how many closing parentheses are needed to to balance
+                leftSeen++;
+                balance++;
             } else if (ch == ')') {
                 if (balance == 0) {
                     continue;
@@ -59,12 +59,12 @@ s[i] is one of  '(' , ')' and lowercase English letters.
         
         if (balance == 0) return sb.toString();
         
-        int openToKeep = openSeen - balance;
+        int leftToKeep = leftSeen - balance;
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < sb.length(); i++) {
             if (sb.charAt(i) == '(') {
-                if (openToKeep <= 0) continue;
-                openToKeep--;
+                if (leftToKeep <= 0) continue;
+                leftToKeep--;
             }
             res.append(sb.charAt(i));
         }
