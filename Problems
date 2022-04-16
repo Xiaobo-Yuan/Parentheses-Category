@@ -531,32 +531,33 @@ Constraints:
 1 <= s.length <= 10^5
 s consists of '(' and ')' only.
 
-// When we go through the string from the beginning to the end, there is actually a time-line, so we have the 
-// concept : current and before the current
-
- public int minInsertions(String s) {
-        int res = 0; // How many left/right parentheses need to be added which should be already added
+    // same idea as 921. Minimum Add to Make Parentheses Valid
+    // but more tricks to handle one left mapping to two rights
+    
+    public int minInsertions(String s) {
+        int res = 0; // How many left/right parentheses need to be added to balance
         int right = 0; // or call it balance, which represents how many right parentheses need to be added to balance
         
         for (char ch : s.toCharArray()) {
-            if (ch == '(') { // if current is 'left'
-                if (right % 2 != 0) {// if the number of the 'right' before the current 'left' is odd, 
+            if (ch == '(') {
+                if (right % 2 != 0) {// if the number of the right is odd before the current left, 
                     right--;         // it means before the current 'left' there is one more 'right' no-matching. How do we handle this 
                     res++;           // before moving to the current 'left'? the smart way: there should be one more 'right' being added
                                      // which means res++, but at the same time, right--.
                 }
                 right += 2;
-            } else if (ch == ')') { // if current is 'right'
-                right--;
-                if (right == -1) {// there is no matching left before the first right
-                    res++;        // add one 'left';
-                    right += 2;   // right = -1 + 2 = 1, means needs one right; if the second consecutive right coming, then right-- = 0
+            } else if (ch == ')') {
+                if (right == 0) {
+                    res++; // Need to add one left;
+                    right += 1; // if the second consecutive right coming, then right-- = 0, and res doesn't need to be incremented in this case.
+                                // if the next is left, then we run into the situation where (right % 2 != 0)
+                } else {
+                    right--;
                 }
             }
         }
         
-        return res + right; // Everytime we increment the res, it's definitely part of the final result, however, the 'right' value is 
-                            // dynamically chaning during the whole process, and we only count its value after the scanning is complete.
+        return res + right;
     }
- 
- 
+    
+    
